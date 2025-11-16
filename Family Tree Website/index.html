@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Family Tree</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        html, body { height: 100%; }
+        body { margin: 0; }
+        /* optional: give SVG a background so you can see full area */
+        svg#familyTree { background: #e7d5c8; display: block; }
+        @font-face {
+            font-family: 'Quicksand';
+            src: url('fonts/Quicksand-SemiBold.ttf') format('truetype');
+        }
+        text {
+            font-family: 'Quicksand';
+        }
+    </style>
+</head>
+<body>
+    <svg id="familyTree" preserveAspectRatio="xMidYMid meet"></svg>
+    <div id="info-panel" style="
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 250px;
+    background: #f8f8f8;
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+    font-family: 'Quicksand';
+    ">
+        <h3 id="info-name"></h3>
+        <p id="info-birth"></p>
+        <p id="info-death"></p>
+        <p id="info-parents"> </p>
+        <p id="info-spouse"></p>
+        <p id="info-siblings"> </p>
+        <p id="info-children"></p>
+    </div>
+    <script src="tree.js"></script>
+</body>
+</html>
