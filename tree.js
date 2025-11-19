@@ -37,6 +37,18 @@ Promise.all([
   let {width, height} = getSize();
   svg.attr("viewBox", `0 0 ${width} ${height}`);
 
+  svg.append("defs").append("marker")
+    .attr("id", "arrow")
+    .attr("viewBox", "0 0 10 10")
+    .attr("refX", 12)
+    .attr("refY", 5)
+    .attr("markerWidth", 6)
+    .attr("markerHeight", 6)
+    .attr("orient", "auto-start-reverse")
+    .append("path")
+    .attr("d", "M 0 0 L 10 5 L 0 10 z")
+    .attr("fill", "#555");
+
   // --- create groups for layering ---
   const linkGroup = g.append("g").attr("class", "links");
   const nodeGroup = g.append("g").attr("class", "nodes");
@@ -65,8 +77,10 @@ Promise.all([
             case "sibling": return "#20b95355";
             case "cousin": return "blue";
             default: return "#999";
-        }
-    });
+        }})
+    .attr("marker-end", d =>
+        d.type === "parent" ? "url(#arrow)" : null
+    );
 
   // Nodes
   const node = nodeGroup.selectAll("circle")
