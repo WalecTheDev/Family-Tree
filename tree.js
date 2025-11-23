@@ -6,14 +6,14 @@ const svg = d3.select("#familyTree");
 svg.append("defs").append("marker")
     .attr("id", "arrow")
     .attr("viewBox", "0 0 10 10")
-    .attr("refX", 25)
+    .attr("refX", 40)
     .attr("refY", 5)
     .attr("markerWidth", 8)
     .attr("markerHeight", 8)
     .attr("orient", "auto-start-reverse")
     .append("path")
     .attr("d", "M 0 0 L 10 5 L 0 10 z")
-    .attr("fill", "#38170355");
+    .attr("fill", "#5c4a3fff");
 
 // This group will be zoomed/panned
 const g = svg.append("g");
@@ -72,8 +72,8 @@ Promise.all([
     .attr("stroke-width", 2)
     .attr("stroke", d => {
         switch(d.type) {
-            case "spouse": return "#e7101055";
-            case "parent": return "#38170355";
+            case "spouse": return "#a83434ff";
+            case "parent": return "#5c4a3fff";
             case "sibling": return "#20b95355";
             case "cousin": return "blue";
             default: return "#999";
