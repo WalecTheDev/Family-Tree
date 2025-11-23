@@ -227,7 +227,8 @@ Promise.all([
     const linkForce = simulation.force("link");
     if (linkForce) {
       linkForce.distance(d => {
-        if (d.type === "spouse" || d.type === "divorced") return Math.max(30, width * 0.03);
+        if (d.type === "spouse") return Math.max(40, width * 0.04);
+        if (d.type === "divorced") return Math.max(80, width * 0.1);
         if (d.type === "parent") return Math.max(60, width * 0.07);
         return Math.max(80, width * 0.12);
       });
@@ -261,6 +262,9 @@ Promise.all([
     d3.select(event.currentTarget)
         .attr("stroke", "orange")
         .attr("stroke-width", 4);
+
+
+    d3.select("#info-photo").source(d.photo ? d.photo : null)
 
     // Update panel
     d3.select("#info-name").text(d.name ? d.name + " " + d.surname : "");
