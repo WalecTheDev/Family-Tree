@@ -67,7 +67,7 @@ Promise.all([
   // Create the simulation with forces that depend on width/height
   const simulation = d3.forceSimulation(nodes)
     .force("link", d3.forceLink(links).id(d => d.id).distance(d => {
-      if (d.type === "spouse") return 60;
+      if (d.type === "spouse" || d.type === "divorced") return 60;
       if (d.type === "parent") return 50;
       return 100;
     }))
@@ -85,10 +85,11 @@ Promise.all([
             case "spouse": return "#a83434ff";
             case "parent": return "#5c4a3fff";
             case "sibling": return "#20b95355";
-            case "cousin": return "blue";
+            case "cousin": return "#2e6bbb54";
+            case "divorced": return "#c930305e";
             default: return "#999";
-        }}
-    );
+        }})
+    .attr("stroke-dasharray", d => d.type === "divorced" ? "4 4" : null);
 
   // Nodes
   const node = nodeGroup.selectAll("circle")
@@ -226,7 +227,7 @@ Promise.all([
     const linkForce = simulation.force("link");
     if (linkForce) {
       linkForce.distance(d => {
-        if (d.type === "spouse") return Math.max(30, width * 0.03);
+        if (d.type === "spouse" || d.type === "divorced") return Math.max(30, width * 0.03);
         if (d.type === "parent") return Math.max(60, width * 0.07);
         return Math.max(80, width * 0.12);
       });

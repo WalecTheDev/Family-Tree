@@ -562,7 +562,7 @@
     {
         "source": 2015,
         "target": 2016,
-        "type": "spouse"
+        "type": "divorced"
     },
     {
         "source": 2009,
@@ -692,7 +692,7 @@
     {
         "source": 1002,
         "target": 1003,
-        "type": "spouse"
+        "type": "divorced"
     },
     {
         "source": 1002,
