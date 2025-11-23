@@ -82,11 +82,11 @@ Promise.all([
     .attr("stroke-width", 2)
     .attr("stroke", d => {
         switch(d.type) {
-            case "spouse": return "#a83434ff";
-            case "parent": return "#5c4a3fff";
-            case "sibling": return "#20b95355";
-            case "cousin": return "#2e6bbb54";
-            case "divorced": return "#c930305e";
+            case "spouse": return "#e67575ff";
+            case "parent": return "#eafeffff";
+            case "sibling": return "#9afcbaa1";
+            case "cousin": return "#97c0f7a1";
+            case "divorced": return "#eb85858e";
             default: return "#999";
         }})
     .attr("stroke-dasharray", d => d.type === "divorced" ? "4 4" : null);
@@ -96,11 +96,11 @@ Promise.all([
     .data(nodes)
     .enter().append("circle")
     .attr("r", 15)
-    .attr("fill", "#af7049ff")
+    .attr("fill", "#1d0b50ff")
     .attr("stroke", d => {
-      if(d.gender == "male") {return "#090f5aff"}
-      else if(d.gender == "female") {return "#7a176dff"}
-      return "#000000ff"
+      if(d.gender == "male") {return "#828affff"}
+      else if(d.gender == "female") {return "#ff79edff"}
+      return "#cacacaff"
     })
     .attr("stroke-width", 2)
     .call(drag(simulation))
@@ -111,9 +111,11 @@ Promise.all([
     .data(nodes)
     .enter().append("text")
     .text(d => {
-      if(d.name == null) {return null} 
-      else {return d.name + " " + d.surname}})
+      if(d.name == null) return null;
+      if(d.surname == null) return d.name;
+      return d.name + " " + d.surname})
     .attr("font-size", "15px")
+    .attr("fill", "#ffffffff")
     .attr("text-anchor", "middle")
     .attr("dy", -20);
 
@@ -180,9 +182,9 @@ Promise.all([
     })
     .attr("fill", d => {
       // Optional: color match the link stroke
-      if (d.type === "parent") return "#5c4a3fff";
-      if (d.type === "spouse") return "#a83434ff";
-      if (d.type === "sibling") return "#20b95355";
+      if (d.type === "parent") return "#eafeffff";
+      if (d.type === "spouse") return "#e67575ff";
+      if (d.type === "sibling") return "#9afcbaa1";
       if (d.type === "cousin") return "blue";
       return "#999";
     });
