@@ -67,11 +67,11 @@ Promise.all([
   // Create the simulation with forces that depend on width/height
   const simulation = d3.forceSimulation(nodes)
     .force("link", d3.forceLink(links).id(d => d.id).distance(d => {
-      if (d.type === "spouse" || d.type === "divorced") return 60;
-      if (d.type === "parent") return 50;
-      return 100;
+      if (d.type === "spouse" || d.type === "divorced") return 120;
+      if (d.type === "parent") return 90;
+      return 200;
     }))
-    .force("charge", d3.forceManyBody().strength(-120))
+    .force("charge", d3.forceManyBody().strength(-200))
     .force("collision", d3.forceCollide().radius(d => 3))
     .force("center", d3.forceCenter(width / 3, height / 3));
 
