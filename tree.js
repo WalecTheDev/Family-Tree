@@ -3,6 +3,18 @@
 // Select the SVG by id
 const svg = d3.select("#familyTree");
 
+svg.append("defs").append("marker")
+    .attr("id", "arrow")
+    .attr("viewBox", "0 0 10 10")
+    .attr("refX", 12)
+    .attr("refY", 5)
+    .attr("markerWidth", 6)
+    .attr("markerHeight", 6)
+    .attr("orient", "auto-start-reverse")
+    .append("path")
+    .attr("d", "M 0 0 L 10 5 L 0 10 z")
+    .attr("fill", "#555");
+
 // This group will be zoomed/panned
 const g = svg.append("g");
 
@@ -36,18 +48,6 @@ Promise.all([
   // compute size and set viewBox accordingly
   let {width, height} = getSize();
   svg.attr("viewBox", `0 0 ${width} ${height}`);
-
-  svg.append("defs").append("marker")
-    .attr("id", "arrow")
-    .attr("viewBox", "0 0 10 10")
-    .attr("refX", 12)
-    .attr("refY", 5)
-    .attr("markerWidth", 6)
-    .attr("markerHeight", 6)
-    .attr("orient", "auto-start-reverse")
-    .append("path")
-    .attr("d", "M 0 0 L 10 5 L 0 10 z")
-    .attr("fill", "#555");
 
   // --- create groups for layering ---
   const linkGroup = g.append("g").attr("class", "links");
