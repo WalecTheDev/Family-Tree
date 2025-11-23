@@ -227,10 +227,10 @@ Promise.all([
     const linkForce = simulation.force("link");
     if (linkForce) {
       linkForce.distance(d => {
-        if (d.type === "spouse") return Math.max(40, width * 0.008);
-        if (d.type === "divorced") return Math.max(80, width * 0.016);
-        if (d.type === "parent") return Math.max(60, width * 0.012);
-        return Math.max(100, width * 0.02);
+        if (d.type === "spouse") return Math.max(60, width * 0.3);
+        if (d.type === "divorced") return Math.max(100, width * 0.5);
+        if (d.type === "parent") return Math.max(80, width * 0.4);
+        return Math.max(120, width * 0.6);
       });
     }
   }
