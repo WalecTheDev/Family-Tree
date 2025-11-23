@@ -6,14 +6,14 @@ const svg = d3.select("#familyTree");
 svg.append("defs").append("marker")
     .attr("id", "arrow")
     .attr("viewBox", "0 0 10 10")
-    .attr("refX", 12)
+    .attr("refX", 25)
     .attr("refY", 5)
-    .attr("markerWidth", 6)
-    .attr("markerHeight", 6)
+    .attr("markerWidth", 8)
+    .attr("markerHeight", 8)
     .attr("orient", "auto-start-reverse")
     .append("path")
     .attr("d", "M 0 0 L 10 5 L 0 10 z")
-    .attr("fill", "#555");
+    .attr("fill", "#38170355");
 
 // This group will be zoomed/panned
 const g = svg.append("g");
