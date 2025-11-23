@@ -96,7 +96,7 @@ Promise.all([
     .data(nodes)
     .enter().append("circle")
     .attr("r", 15)
-    .attr("fill", "#1d0b50ff")
+    .attr("fill", "#ffe9a0ff")
     .attr("stroke", d => {
       if(d.gender == "male") {return "#828affff"}
       else if(d.gender == "female") {return "#ff79edff"}
@@ -151,7 +151,7 @@ Promise.all([
       .append("path")
       .attr("class", "arrow")
       .attr("d", "M 0 -6 L 12 0 L 0 6 z")
-      .attr("fill", "#333")
+      .attr("fill", "#eafeffff")
       .attr("pointer-events", "none")
       .merge(arrowSel);
 
@@ -256,13 +256,13 @@ Promise.all([
   function showInfo(d, event, nodeSelection) {
     // Highlight the selected node
     nodeSelection.attr("stroke", d => {
-      if(d.gender == "male") {return "#090f5aff"}
-      else if(d.gender == "female") {return "#7a176dff"}
-      return "#000000ff"
+      if(d.gender == "male") {return "#828affff"}
+      else if(d.gender == "female") {return "#ff79edff"}
+      return "#cacacaff"
     })
     .attr("stroke-width", 2);
     d3.select(event.currentTarget)
-        .attr("stroke", "orange")
+        .attr("stroke", "#ffae00ff")
         .attr("stroke-width", 4);
 
 
