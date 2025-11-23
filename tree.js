@@ -3,18 +3,6 @@
 // Select the SVG by id
 const svg = d3.select("#familyTree");
 
-svg.append("defs").append("marker")
-    .attr("id", "arrow")
-    .attr("viewBox", "0 0 10 10")
-    .attr("refX", 40)
-    .attr("refY", 5)
-    .attr("markerWidth", 8)
-    .attr("markerHeight", 8)
-    .attr("orient", "auto-start-reverse")
-    .append("path")
-    .attr("d", "M 0 0 L 10 5 L 0 10 z")
-    .attr("fill", "#5c4a3fff");
-
 // This group will be zoomed/panned
 const g = svg.append("g");
 
@@ -54,6 +42,28 @@ Promise.all([
   const nodeGroup = g.append("g").attr("class", "nodes");
   const labelGroup = g.append("g").attr("class", "labels");
 
+  const arrowFraction = 0.5;
+
+  const arrowGroup = g.append("g").attr("class", "link-arrows");
+
+  // Bind arrows to the same links you want arrows for (e.g. parent links)
+  function arrowsData(links) {
+    // Filter links that should get arrows (parent links here)
+    return links.filter(d => d.type === "parent");
+  }
+
+  let arrowSel = arrowGroup.selectAll("path.arrow")
+    .data(arrowsData(links))
+    .enter()
+    .append("path")
+    .attr("class", "arrow")
+    // Design the arrow so that its tip lies at x = ARROW_LENGTH, y = 0 (pointing right)
+    // Translate the tip to the computed point, then rotate
+    .attr("d", "M 0 -6 L 12 0 L 0 6 z")   // Triangle 12px long, tip at (12,0)
+    .attr("fill", "#333")
+    .attr("stroke", "none")
+    .attr("pointer-events", "none"); // So it doesn't capture clicks
+
   // Create the simulation with forces that depend on width/height
   const simulation = d3.forceSimulation(nodes)
     .force("link", d3.forceLink(links).id(d => d.id).distance(d => {
@@ -77,9 +87,7 @@ Promise.all([
             case "sibling": return "#20b95355";
             case "cousin": return "blue";
             default: return "#999";
-        }})
-    .attr("marker-end", d =>
-        d.type === "parent" ? "url(#arrow)" : null
+        }}
     );
 
   // Nodes
@@ -130,6 +138,53 @@ Promise.all([
     label
         .attr("x", d => d.x)
         .attr("y", d => d.y);
+
+    // Rebind in case links array changed (optional)
+    arrowSel = arrowGroup.selectAll("path.arrow")
+      .data(arrowsData(links));
+
+    arrowSel.exit().remove();
+    arrowSel = arrowSel.enter()
+      .append("path")
+      .attr("class", "arrow")
+      .attr("d", "M 0 -6 L 12 0 L 0 6 z")
+      .attr("fill", "#333")
+      .attr("pointer-events", "none")
+      .merge(arrowSel);
+
+    // Position & rotate each arrow
+    arrowSel.attr("transform", d => {
+      // Get numeric source/target ids if D3 replaced them with objects
+      const sx = (typeof d.source === "object") ? d.source.x : d3.select(nodes.find(n => n.id === d.source)).x;
+      const sy = (typeof d.source === "object") ? d.source.y : d3.select(nodes.find(n => n.id === d.source)).y;
+      const tx = (typeof d.target === "object") ? d.target.x : d3.select(nodes.find(n => n.id === d.target)).x;
+      const ty = (typeof d.target === "object") ? d.target.y : d3.select(nodes.find(n => n.id === d.target)).y;
+
+    // Fraction point
+    const fx = sx + (tx - sx) * arrowFraction;
+    const fy = sy + (ty - sy) * arrowFraction;
+
+    // Angle (degrees)
+    const angle = Math.atan2(ty - sy, tx - sx) * 180 / Math.PI;
+
+    // Because the arrow path's tip is at x=12, translate so tip lands at (fx,fy).
+    // So we must translate by (fx - 12*cos(angle), fy - 12*sin(angle)) then rotate.
+    const tipOffsetX = Math.cos(angle * Math.PI / 180) * 12;
+    const tipOffsetY = Math.sin(angle * Math.PI / 180) * 12;
+
+    const txpos = fx - tipOffsetX;
+    const typos = fy - tipOffsetY;
+
+    return `translate(${txpos},${typos}) rotate(${angle})`;
+    })
+    .attr("fill", d => {
+      // Optional: color match the link stroke
+      if (d.type === "parent") return "#5c4a3fff";
+      if (d.type === "spouse") return "#a83434ff";
+      if (d.type === "sibling") return "#20b95355";
+      if (d.type === "cousin") return "blue";
+      return "#999";
+    });
   });
 
   function drag(simulation) {
