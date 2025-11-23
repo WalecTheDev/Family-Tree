@@ -264,7 +264,12 @@ Promise.all([
         .attr("stroke-width", 4);
 
 
-    d3.select("#info-photo").source(d.photo ? d.photo : null)
+    const img = d3.select("#info-photo");
+    if (d.photo) {
+      img.attr("src", d.photo).style("display", "block");
+    } else {
+      img.attr("src", "").style("display", "none");
+    }
 
     // Update panel
     d3.select("#info-name").text(d.name ? d.name + " " + d.surname : "");
