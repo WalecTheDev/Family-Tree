@@ -39,12 +39,11 @@ Promise.all([
 
   // --- create groups for layering ---
   const linkGroup = g.append("g").attr("class", "links");
+  const arrowGroup = g.append("g").attr("class", "link-arrows");
   const nodeGroup = g.append("g").attr("class", "nodes");
   const labelGroup = g.append("g").attr("class", "labels");
 
   const arrowFraction = 0.5;
-
-  const arrowGroup = g.append("g").attr("class", "link-arrows");
 
   // Bind arrows to the same links you want arrows for (e.g. parent links)
   function arrowsData(links) {
@@ -69,6 +68,7 @@ Promise.all([
     .force("link", d3.forceLink(links).id(d => d.id).distance(d => {
       if (d.type === "spouse" || d.type === "divorced") return 120;
       if (d.type === "parent") return 90;
+      if (d.type === "sibling") return null;
       return 200;
     }))
     .force("charge", d3.forceManyBody().strength(-200))
@@ -227,10 +227,10 @@ Promise.all([
     const linkForce = simulation.force("link");
     if (linkForce) {
       linkForce.distance(d => {
-        if (d.type === "spouse") return Math.max(40, width * 0.04);
-        if (d.type === "divorced") return Math.max(80, width * 0.1);
-        if (d.type === "parent") return Math.max(60, width * 0.07);
-        return Math.max(80, width * 0.12);
+        if (d.type === "spouse") return Math.max(40, width * 0.008);
+        if (d.type === "divorced") return Math.max(80, width * 0.016);
+        if (d.type === "parent") return Math.max(60, width * 0.012);
+        return Math.max(100, width * 0.02);
       });
     }
   }
