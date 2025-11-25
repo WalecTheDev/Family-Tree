@@ -342,7 +342,24 @@ Promise.all([
         if (l.type === "parent" && l.source.id === d.id) return 1;
         if (l.type === "sibling" && (l.source.id === d.id || l.target.id === d.id)) return 1;
 
-        return 0.1; // fade unrelated links
+        return 0.3; // fade unrelated links
+    });
+
+    // Fade link arrows
+    arrowSel.attr("stroke-opacity", l => {
+        // related if this node is source or target
+        // or if type is parent/sibling/cousin of this node
+        if (l.source.id === d.id || l.target.id === d.id) {
+            return 1; // fully visible
+        }
+
+        // Optional: highlight parents and siblings recursively
+        // Check if the clicked node is a child of the link
+        if (l.type === "parent" && l.target.id === d.id) return 1;
+        if (l.type === "parent" && l.source.id === d.id) return 1;
+        if (l.type === "sibling" && (l.source.id === d.id || l.target.id === d.id)) return 1;
+
+        return 0.3; // fade link arrows
     });
 
     // Optionally, fade unrelated nodes
