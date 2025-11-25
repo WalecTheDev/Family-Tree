@@ -135,7 +135,8 @@ Promise.all([
     if (event.target.tagName === "svg") {
         link.attr("stroke-opacity", 1);
         node.attr("opacity", 1);
-        labels.attr("opacity", 1);
+        arrowSel.attr("opacity", 1);
+        label.attr("opacity", 1);
     }
   });
 
