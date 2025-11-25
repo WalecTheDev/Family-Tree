@@ -95,16 +95,20 @@ Promise.all([
   const node = nodeGroup.selectAll("circle")
     .data(nodes)
     .enter().append("circle")
-    .attr("r", 15)
-    .attr("fill", "#ffe9a0ff")
+    .attr("r", 10)
+    .attr("fill", "#ffffffff")
     .attr("stroke", d => {
-      if(d.gender == "male") {return "#828affff"}
-      else if(d.gender == "female") {return "#ff79edff"}
+      if(d.gender == "male") {return "#5fbfffff"}
+      else if(d.gender == "female") {return "#ff88efff"}
       return "#cacacaff"
     })
     .attr("stroke-width", 2)
-    .call(drag(simulation))
-    .on("click", (event, d) => showInfo(d, event, node));
+    .call(drag(simulation));
+
+  node.on("click", (event, d) => {
+    showInfo(d, event, node);        // your existing info panel
+    highlightLinks(d);  // fade/highlight links and nodes
+  });
 
   // Labels
   const label = labelGroup.selectAll("text")
@@ -126,6 +130,14 @@ Promise.all([
     });
 
   svg.call(zoom);
+
+  svg.on("click", (event) => {
+    if (event.target.tagName === "svg") {
+        link.attr("stroke-opacity", 1);
+        node.attr("opacity", 1);
+        labels.attr("opacity", 1);
+    }
+  });
 
   simulation.on("tick", () => {
     link
@@ -256,8 +268,8 @@ Promise.all([
   function showInfo(d, event, nodeSelection) {
     // Highlight the selected node
     nodeSelection.attr("stroke", d => {
-      if(d.gender == "male") {return "#828affff"}
-      else if(d.gender == "female") {return "#ff79edff"}
+      if(d.gender == "male") {return "#5fbfffff"}
+      else if(d.gender == "female") {return "#ff88efff"}
       return "#cacacaff"
     })
     .attr("stroke-width", 2);
@@ -313,6 +325,41 @@ Promise.all([
     const childNames = childLinks.map(l => nodes.find(n => n.id === getNodeId(l.target)).name);
     d3.select("#info-children").text(childNames.length ? "Dzieci: " + "\n" + childNames.join(", ") : "");
 
+  }
+
+  function highlightLinks(d) {
+    // d = clicked node
+    link.attr("stroke-opacity", l => {
+        // related if this node is source or target
+        // or if type is parent/sibling/cousin of this node
+        if (l.source.id === d.id || l.target.id === d.id) {
+            return 1; // fully visible
+        }
+
+        // Optional: highlight parents and siblings recursively
+        // Check if the clicked node is a child of the link
+        if (l.type === "parent" && l.target.id === d.id) return 1;
+        if (l.type === "parent" && l.source.id === d.id) return 1;
+        if (l.type === "sibling" && (l.source.id === d.id || l.target.id === d.id)) return 1;
+
+        return 0.1; // fade unrelated links
+    });
+
+    // Optionally, fade unrelated nodes
+    node.attr("opacity", n => {
+        // related if n is connected to the clicked node
+        if (n.id === d.id) return 1;
+        const connected = links.some(l => (l.source.id === d.id && l.target.id === n.id) ||
+                                          (l.target.id === d.id && l.source.id === n.id));
+        return connected ? 1 : 0.3;
+    });
+
+    labels.attr("opacity", n => {
+        if (n.id === d.id) return 1;
+        const connected = links.some(l => (l.source.id === d.id && l.target.id === n.id) ||
+                                          (l.target.id === d.id && l.source.id === n.id));
+        return connected ? 1 : 0.3;
+    });
   }
 
   // Optional: generate sibling and cousin links automatically
