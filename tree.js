@@ -371,7 +371,7 @@ Promise.all([
         return connected ? 1 : 0.3;
     });
 
-    labels.attr("opacity", n => {
+    label.attr("opacity", n => {
         if (n.id === d.id) return 1;
         const connected = links.some(l => (l.source.id === d.id && l.target.id === n.id) ||
                                           (l.target.id === d.id && l.source.id === n.id));
